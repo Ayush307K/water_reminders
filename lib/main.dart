@@ -5,10 +5,10 @@ import 'package:water_reminders/screens/create_account_page.dart';
 import 'package:water_reminders/screens/home_screen.dart';
 import 'package:water_reminders/screens/login_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
-  Firebase.initializeApp();
-
 }
 
 class MyApp extends StatelessWidget {
