@@ -5,6 +5,7 @@ import 'package:water_reminders/screens/create_account_page.dart';
 import 'package:water_reminders/screens/home_screen.dart';
 import 'package:water_reminders/screens/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:water_reminders/screens/notification_management.dart';
 import 'package:water_reminders/screens/reminder_settings.dart';
 
 void main() async {
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => CreateAccountPage(),
         '/home': (context) => HomeScreen(),
         '/reminder_settings': (context) => ReminderSettingsScreen(userId: '',),
+        '/notifications': (context) => NotificationManagementPage(),
       },
     );
   }

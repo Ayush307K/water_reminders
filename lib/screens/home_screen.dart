@@ -35,6 +35,13 @@ class HomeScreen extends StatelessWidget {
                   Navigator.pushNamed(context, '/reminder_settings');
                 },
               ),
+              SizedBox(height: 20),
+              CustomButton(
+                text: 'View Notifications',
+                onPressed: () {
+                  Navigator.pushNamed(context, '/notifications');
+                },
+              ),
             ],
           ),
         ),
