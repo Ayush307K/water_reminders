@@ -13,24 +13,41 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
 
-  void _createAccount() async {
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _createAccount() async {
     setState(() {
       _isLoading = true;
     });
-    bool success = await FirebaseAuthService().createAccount(
-      email: _emailController.text,
-      password: _passwordController.text,
-    );
-    setState(() {
-      _isLoading = false;
-    });
-    if (success) {
-      Navigator.pushReplacementNamed(context, '/home');
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Account creation failed. Please try again.')),
+
+    try {
+      bool success = await FirebaseAuthService().createAccount(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
       );
+      if (success) {
+        Navigator.pushReplacementNamed(context, '/home'); // Navigate to home page
+      } else {
+        _showError('Account creation failed. Please try again.');
+      }
+    } catch (e) {
+      _showError('An error occurred. Please try again.');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   @override

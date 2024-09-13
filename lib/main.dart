@@ -4,6 +4,8 @@ import 'package:water_reminders/screens/auth_check.dart';
 import 'package:water_reminders/screens/create_account_page.dart';
 import 'package:water_reminders/screens/home_screen.dart';
 import 'package:water_reminders/screens/login_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:water_reminders/screens/reminder_settings.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +24,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginPage(),
         '/signup': (context) => CreateAccountPage(),
         '/home': (context) => HomeScreen(),
+        '/reminder_settings': (context) => ReminderSettingsScreen(userId: '',),
       },
     );
   }
