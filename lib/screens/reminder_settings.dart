@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../services/shared_preferences.dart';
 import '../widgets/notification_toggle.dart';
 import '../widgets/time_picker.dart';
 import '../widgets/location_selector.dart';
@@ -22,22 +20,22 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen> {
   @override
   void initState() {
     super.initState();
-    //_loadPreferences(); // Load saved preferences on start
+    _loadPreferences(); // Load saved preferences on start
   }
 
-
+  // Load preferences from SharedPreferences
   void _loadPreferences() async {
-    SharedPreferencesService prefsService = SharedPreferencesService();
-    final prefs = await prefsService.loadPreferences();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _notificationsEnabled = prefs['notificationsEnabled'];
-      _reminderTime = prefs['reminderTime'];
-      _reminderFrequency = prefs['reminderFrequency'];
-      _customMessage = prefs['customMessage'];
-      _selectedLocation = prefs['selectedLocation'];
+      _notificationsEnabled = prefs.getBool('notificationsEnabled') ?? false;
+      _customMessage = prefs.getString('customMessage') ?? '';
+      _reminderFrequency = prefs.getString('reminderFrequency') ?? 'Daily';
+      _selectedLocation = prefs.getString('selectedLocation') ?? 'None';
+      int hour = prefs.getInt('reminderHour') ?? _reminderTime.hour;
+      int minute = prefs.getInt('reminderMinute') ?? _reminderTime.minute;
+      _reminderTime = TimeOfDay(hour: hour, minute: minute);
     });
   }
-
 
   // Save preferences to SharedPreferences
   void _savePreferences() async {
@@ -56,24 +54,16 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen> {
       appBar: AppBar(
         title: Text('Reminder Settings'),
         actions: [
-      IconButton(
-      icon: Icon(Icons.save),
-      onPressed: () async {
-        SharedPreferencesService prefsService = SharedPreferencesService();
-        await prefsService.savePreferences(
-          notificationsEnabled: _notificationsEnabled,
-          reminderTime: _reminderTime,
-          reminderFrequency: _reminderFrequency,
-          customMessage: _customMessage,
-          selectedLocation: _selectedLocation,
-        );
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Settings saved!')),
-        );
-      },
-    )
-
-    ],
+          IconButton(
+            icon: Icon(Icons.save),
+            onPressed: () {
+              _savePreferences();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Settings saved!')),
+              );
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -183,4 +173,3 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen> {
     );
   }
 }
-
